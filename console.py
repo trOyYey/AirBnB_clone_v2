@@ -10,6 +10,7 @@ from models.state import State
 from models.city import City
 from models.amenity import Amenity
 from models.review import Review
+from os import getenv
 
 
 class HBNBCommand(cmd.Cmd):
@@ -140,7 +141,6 @@ class HBNBCommand(cmd.Cmd):
                 except ValueError:
                     continue
             key_val[key] = val
-            print(f"{key}: {val}")
         new_instance = HBNBCommand.classes[class_n](**key_val)
         print(new_instance.id)
         new_instance.save()
@@ -226,14 +226,25 @@ class HBNBCommand(cmd.Cmd):
             if args not in HBNBCommand.classes:
                 print("** class doesn't exist **")
                 return
-            for k, v in storage._FileStorage__objects.items():
-                if k.split('.')[0] == args:
-                    print_list.append(str(v))
+            if "db" == getenv("HBNB_TYPE_STORAGE"):
+                dictt = storage.all(args)
+                for key in dictt:
+                    if key.split('.')[0] == args:
+                        print_list.append(str(dictt[key]))
+            else:
+                for k, v in storage._FileStorage__objects.items():
+                    if k.split('.')[0] == args:
+                        print_list.append(str(v))
         else:
-            for k, v in storage._FileStorage__objects.items():
-                print_list.append(str(v))
-
-        print(print_list)
+            if getenv("HBNB_TYPE_STORAGE") == "db":
+                dictt = storage.all()
+                for key in dictt:
+                    print_list.append(str(dictt[key]))
+            else:
+                for k, v in storage._FileStorage__objects.items():
+                    print_list.append(str(v))
+        print("[", end="")
+        print(", ".join(print_list), end="]\n")
 
     def help_all(self):
         """ Help information for the all command """
