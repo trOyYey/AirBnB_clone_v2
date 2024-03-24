@@ -5,6 +5,7 @@ from datetime import datetime
 from sqlalchemy import Column, DATETIME, String
 from sqlalchemy.ext.declarative import declarative_base
 from os import getenv
+import models
 
 if getenv("HBNB_TYPE_STORAGE") == 'db':
     Base = declarative_base()
@@ -14,6 +15,8 @@ else:
 class BaseModel:
     """A base class for all hbnb models"""
 
+    if 'db' == getenv("HBNB_TYPE_STORAGE"):
+        __table_args__ = {'mysql_engine': 'InnoDB', 'mysql_charset': 'latin1'}
     id = Column(String(60), primary_key=True)
     created_at = Column(DATETIME, nullable=False, default=datetime.utcnow())
     updated_at = Column(DATETIME, nullable=False, default=datetime.utcnow())
@@ -54,8 +57,8 @@ class BaseModel:
         """Updates updated_at with current time when instance is changed"""
         from models import storage
         self.updated_at = datetime.now()
-        storage.new(self)
-        storage.save()
+        models.storage.new(self)
+        models.storage.save()
 
     def to_dict(self):
         """Convert instance into dict format"""
@@ -72,4 +75,4 @@ class BaseModel:
     def delete(self):
         from models import storage
         """ deletes the instance"""
-        storage.delete(self)
+        models.storage.delete(self)
