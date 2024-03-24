@@ -54,10 +54,10 @@ class Place(BaseModel, Base):
         def amenities(self):
             """getter for list of all amenities"""
             newList = []
-            amenities = models.storage.all(Amenity)
-            for key in amenities:
-                if amenities[key] in self.amenity_ids:
-                    newList.append(amenities[key])
+            allAmenities = models.storage.all(Amenity)
+            for key in allAmenities:
+                if allAmenities[key] in self.amenity_ids:
+                    newList.append(allAmenities[key])
             return newList
 
         @amenities.setter
