@@ -2,7 +2,7 @@
 """fabric script that distributes an archive to a webserver"""
 from os.path import exists
 from fabric.api import *
-env.hosts = ['54.209.125.126', '54.85.96..138']
+env.hosts = ['54.209.125.126', '54.85.96.138']
 
 
 def do_deploy(archive_path):
@@ -15,7 +15,7 @@ def do_deploy(archive_path):
     if not exists(archive_path):
         return False
     serverP = archive_path.replace("versions", "/tmp")
-    uploadF = put(archive_path, ServerP)
+    uploadF = put(archive_path, serverP)
     if uploadF.failed:
         return False
     fileN = serverP.split('/')[-1].split('.')[0]
@@ -26,7 +26,7 @@ def do_deploy(archive_path):
     unpackF = run(f"tar -xzf {serverP} -C {fileP}")
     if unpackF.failed:
         return False
-    removeF = run(f"rm {serverPath}")
+    removeF = run(f"rm {serverP}")
     if removeF.failed:
         return False
     serverP = fileP
