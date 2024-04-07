@@ -4,10 +4,12 @@ from os.path import isdir
 from datetime import datetime
 from fabric .api import *
 
+
 def do_pack():
     """function that generates .tgz archive from web_static"""
     now = datetime.now()
     tf = f"{now.year}{now.month}{now.day}{now.hour}{now.minute}{now.second}"
+
     try:
         if not isdir("versions"):
             local("mkdir versions")
@@ -17,5 +19,5 @@ def do_pack():
             return None
         else:
             return (filep)
-    except :
+    except Exception as e:
         return None
