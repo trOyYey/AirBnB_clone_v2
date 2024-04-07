@@ -7,13 +7,12 @@ do_deploy = __import__('2-do_deploy_web_static').do_deploy
 env.hosts = ['54.209.125.126', '54.85.96.138']
 
 
-check_path = do_pack()
+pack_path = do_pack()
 
 
 def deploy():
     """ deploy the archive """
-    if check_path is None:
+    if pack_path is None:
         return False
-    else:
-        print(f"web_static packed: {check_path} -> {getsize(check_path)}Bytes")
-        return do_deploy(path)
+    print(f"web_static packed: {pack_path} -> {getsize(pack_path)}Bytes")
+    return do_deploy(pack_path)
