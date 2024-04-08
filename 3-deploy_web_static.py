@@ -15,4 +15,5 @@ def deploy():
     if pack_path is None:
         return False
     print(f"web_static packed: {pack_path} -> {getsize(pack_path)}Bytes")
-    return do_deploy(pack_path)
+    do_deploy(pack_path)
+    return True
