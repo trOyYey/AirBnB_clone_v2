@@ -42,4 +42,5 @@ def do_deploy(archive_path):
     symboF = run(f"ln -s {fileP}/ /data/web_static/current")
     if symboF.failed:
         return False
+    print("New version deployed!")
     return True
