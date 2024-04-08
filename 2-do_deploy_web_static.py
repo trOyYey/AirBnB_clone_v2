@@ -15,10 +15,11 @@ def do_deploy(archive_path):
     if not exists(archive_path):
         return False
     serverP = archive_path.replace("versions", "/tmp")
-    uploadF = put(archive_path, serverP, mod=664)
+    uploadF = put(archive_path, serverP)
     if uploadF.failed:
         return False
     fileN = serverP.split('/')[-1].split('.')[0]
+    print(f"{fileN}")
     fileP = f"/data/web_static/releases/{fileN}"
     createF = run(f"mkdir -p {fileP}")
     if createF.failed:
