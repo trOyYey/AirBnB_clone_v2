@@ -19,6 +19,7 @@ def do_pack():
         if not scrpt:
             return None
         else:
+            local(f"chmod 664 {filep}")
             print(f"web_static packed: versions/web_static_{tf}.tgz")
             return (filep)
     except Exception as e:
