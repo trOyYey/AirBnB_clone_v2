@@ -19,7 +19,6 @@ def do_deploy(archive_path):
     if uploadF.failed:
         return False
     fileN = serverP.split('/')[-1].split('.')[0]
-    print(f"{fileN}")
     fileP = f"/data/web_static/releases/{fileN}"
     createF = run(f"mkdir -p {fileP}")
     if createF.failed:
@@ -31,7 +30,7 @@ def do_deploy(archive_path):
     if removeF.failed:
         return False
     serverP = fileP
-    moveF = run(f"mv {serverP}/web_static/* /data/web_static/releases/{fileN}")
+    moveF = run(f"mv {serverP}/web_static/* /data/web_static/releases/{fileN}/")
     if moveF.failed:
         return False
     removeF2 = run(f"rm -rf {serverP}/web_static")
