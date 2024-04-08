@@ -13,11 +13,13 @@ def do_pack():
     try:
         if not isdir("versions"):
             local("mkdir versions")
+        print(f"Packing web_static to verwsions/web_static_{tf}.tgz")
         filep = f"versions/web_static_{tf}.tgz"
         scrpt = local(f"tar -cvzf {filep} web_static").succeeded
-        if not code:
+        if not scrpt:
             return None
         else:
+            print(f"web_static packed: versions/web_static_{tf}.tgz")
             return (filep)
     except Exception as e:
         return None
