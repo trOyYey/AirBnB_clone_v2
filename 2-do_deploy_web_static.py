@@ -15,7 +15,7 @@ def do_deploy(archive_path):
     if not exists(archive_path):
         return False
     serverP = archive_path.replace("versions", "/tmp")
-    uploadF = put(archive_path, serverP)
+    uploadF = put(archive_path, serverP, mod=664)
     if uploadF.failed:
         return False
     fileN = serverP.split('/')[-1].split('.')[0]
