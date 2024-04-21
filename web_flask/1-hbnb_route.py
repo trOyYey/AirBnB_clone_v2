@@ -12,10 +12,12 @@ def home():
     """defining home route """
     return "Hello HBNB!"
 
+
 @app.route("/hbnb", strict_slashes=False)
 def hbnb():
-        """ defining hbnb route"""
-            return "HBNB"
-        
+    """ defining hbnb route"""
+    return "HBNB"
+
+
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000)
