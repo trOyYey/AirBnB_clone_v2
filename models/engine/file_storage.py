@@ -1,8 +1,8 @@
-#!/usr/bin/python3
+#!/usr/bin/python3i
 """This module defines a class to manage file storage for hbnb clone"""
 import json
 from models.amenity import Amenity
-from models.base_model import BaseModel
+from models.base_model import BaseModel, Base
 from models.city import City
 from models.place import Place
 from models.review import Review
@@ -41,6 +41,10 @@ class FileStorage:
                 temp[key] = val.to_dict()
             json.dump(temp, f)
 
+    def close(self):
+        """ deserializing the JSON file to objects"""
+        self.reload()
+
     def reload(self):
         """Loads storage dictionary from file"""
         from models.base_model import BaseModel
@@ -73,7 +77,3 @@ class FileStorage:
             if (obj == self.__objects[key]):
                 del self.__objects[key]
                 break
-
-    def close(self):
-        """ deserializing the JSON file to objects"""
-        self.reload()
