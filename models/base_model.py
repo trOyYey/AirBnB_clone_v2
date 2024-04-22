@@ -51,7 +51,7 @@ class BaseModel:
         dictt = self.__dict__.copy()
         if "_sa_instance_state" in dictt:
             del dictt["_sa_instance_state"]
-        return f'[{cls}] ({self.id}) {dictt}'
+        return '[{}] ({}) {}'.format(cls, self.id, dictt)
 
     def save(self):
         """Updates updated_at with current time when instance is changed"""

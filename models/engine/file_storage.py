@@ -30,7 +30,7 @@ class FileStorage:
 
     def new(self, obj):
         """Adds new object to storage dictionary"""
-        self.__objects[f"{type(obj).__name__}.{obj.id}"] = obj
+        self.__objects['{}.{}'.format(type(obj).__name__, obj.id)] = obj
 
     def save(self):
         """Saves storage dictionary to file"""
