@@ -12,8 +12,9 @@ from os import getenv
 from sqlalchemy.orm import scoped_session, sessionmaker
 import models
 
-mods = {"User": User,"City": City, "State": State, "Amenity": Amenity,
+mods = {"User": User, "City": City, "State": State, "Amenity": Amenity,
         "Place": Place, "Review": Review}
+
 
 class DBStorage:
     """Class engine that is responsible for connecting and storing via MySQL"""
@@ -26,7 +27,8 @@ class DBStorage:
         PWD = getenv('HBNB_MYSQL_PWD')
         HOST = getenv('HBNB_MYSQL_HOST')
         DB = getenv('HBNB_MYSQL_DB')
-        self.__engine = create_engine(f'mysql+mysqldb://{USER}:{PWD}@{HOST}/{DB}',
+        self.__engine = create_engine(f'mysql+mysqldb://{USER}:'
+                                      f'{PWD}@{HOST}/{DB}',
                                       pool_pre_ping=True)
 
         if "test" == getenv('HBNB_ENV'):
@@ -49,7 +51,10 @@ class DBStorage:
         self.__session.add(obj)
 
     def save(self):
-        """ commit all changes of the current database session (self.__session) """
+        """
+        commit all changes of the current
+        database session (self.__session)
+        """
         self.__session.commit()
 
     def delete(self, obj=None):
@@ -62,7 +67,10 @@ class DBStorage:
         self.__session.close
 
     def reload(self):
-        """ create all tables in the database and create the current database session """
+        """
+        create all tables in the database and
+        create the current database session
+        """
         Base.metadata.create_all(self.__engine)
         session = sessionmaker(bind=self.__engine, expire_on_commit=False)
         self.__session = scoped_session(session)
