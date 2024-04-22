@@ -42,7 +42,8 @@ class DBStorage:
                 for val in self.__session.query(mods[key]):
                     ObjDict[val.__class__.__name__ + '.' + val.id] = val
         else:
-            for val in self.__session.query(mods[cls]):
+            cls = cls if type(cls) != str else mods[cls]
+            for val in self.__session.query(cls):
                 ObjDict[val.__class__.__name__ + '.' + val.id] = val
         return ObjDict
 
