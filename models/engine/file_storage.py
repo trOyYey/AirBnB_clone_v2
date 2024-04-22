@@ -24,7 +24,7 @@ class FileStorage:
         else:
             newDict = {}
             for key in self.__objects:
-                if (cls == type(self.__objects[key])):
+                if (self.__objects[key] == type(cls)):
                     newDict[key] = self.__objects[key]
             return newDict
 
