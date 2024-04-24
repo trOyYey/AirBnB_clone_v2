@@ -33,7 +33,7 @@ def hbnb():
     places = storage.all(Place).values()
     users = storage.all(User)
     for key in places:
-        owner = users[f"User.{place.user_id}"]
+        owner = users[f"User.{key.user_id}"]
         setattr(key, "owner", f"{owner.first_name} {owner.last_name}")
     return render_template('100-hbnb.html', states=states,
                            amenities=amenities, places=places)
