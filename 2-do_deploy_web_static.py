@@ -20,26 +20,26 @@ def do_deploy(archive_path):
         return False
     fileN = serverP.split('/')[-1].split('.')[0]
     fileP = f"/data/web_static/releases/{fileN}"
-    createF = run(f"mkdir -p {fileP}")
+    createF = sudo(f"mkdir -p {fileP}")
     if createF.failed:
         return False
-    unpackF = run(f"tar -xzf {serverP} -C {fileP}")
+    unpackF = sudo(f"tar -xzf {serverP} -C {fileP}")
     if unpackF.failed:
         return False
-    removeF = run(f"rm {serverP}")
+    removeF = sudo(f"rm {serverP}")
     if removeF.failed:
         return False
     serverP = fileP
-    moveF = run(f"mv {serverP}/web_static/* /data/web_static/releases/{fileN}/")
+    moveF = sudo(f"mv {serverP}/web_static/* /data/web_static/releases/{fileN}/")
     if moveF.failed:
         return False
-    removeF2 = run(f"rm -rf {serverP}/web_static")
+    removeF2 = sudo(f"rm -rf {serverP}/web_static")
     if removeF2.failed:
         return False
-    removeF3 = run("rm -rf /data/web_static/current")
+    removeF3 = sudo("rm -rf /data/web_static/current")
     if removeF3.failed:
         return False
-    symboF = run(f"ln -s {fileP}/ /data/web_static/current")
+    symboF = sudo(f"ln -s {fileP}/ /data/web_static/current")
     if symboF.failed:
         return False
     print("New version deployed!")
