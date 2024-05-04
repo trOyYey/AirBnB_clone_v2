@@ -2,7 +2,7 @@
 """fabric script that distributes an archive to a webserver"""
 from os.path import exists
 from fabric.api import *
-env.hosts = ['54.209.125.126', '54.85.96.138']
+env.hosts = ['52.86.126.184', '	18.207.142.29']
 
 
 def do_deploy(archive_path):
