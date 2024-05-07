@@ -2,7 +2,28 @@
 """fabric script that distributes an archive to a webserver"""
 from os.path import exists
 from fabric.api import *
+import os
+
 env.hosts = ['52.86.126.184', '	18.207.142.29']
+env.user = 'ubuntu'
+
+def do_pack():
+    """function that generates .tgz archive from web_static"""
+    now = datetime.now()
+    tf = f"{now.year}{now.month}{now.day}{now.hour}{now.minute}{now.second}"
+
+    try:
+        local("mkdir -p ./versions")
+        print(f"Packing web_static to verwsions/web_static_{tf}.tgz")
+        filep = f"versions/web_static_{tf}.tgz"
+        scrpt = local(f"tar -cvzf {filep} web_static").succeeded
+        if not scrpt:
+            return None
+        else:
+            print(f"web_static packed: versions/web_static_{tf}.tgz")
+            return (filep)
+    except Exception as e:
+        return None
 
 
 def do_deploy(archive_path):
@@ -12,35 +33,21 @@ def do_deploy(archive_path):
     Return:
         True for success and False for failing
     """
-    if not exists(archive_path):
+    if not os.path.exists(archive_path):
         return False
-    serverP = archive_path.replace("versions", "/tmp")
-    uploadF = put(archive_path, serverP)
-    if uploadF.failed:
+    file_name = archive_path.split('/')[1]
+    file_path = '/data/web_static/releases/'
+    releases_path = file_path + file_name[:-4]
+    try:
+        put(archive_path, '/tmp/')
+        run('mkdir -p {}'.format(releases_path))
+        run('tar -xzf /tmp/{} -C {}'.format(file_name, releases_path))
+        run('rm /tmp/{}'.format(file_name))
+        run('mv {}/web_static/* {}/'.format(releases_path, releases_path))
+        run('rm -rf {}/web_static'.format(releases_path))
+        run('rm -rf /data/web_static/current')
+        run('ln -s {} /data/web_static/current'.format(releases_path))
+        print('New version deployed!')
+        return True
+    except:
         return False
-    fileN = serverP.split('/')[-1].split('.')[0]
-    fileP = f"/data/web_static/releases/{fileN}"
-    createF = sudo(f"mkdir -p {fileP}")
-    if createF.failed:
-        return False
-    unpackF = sudo(f"tar -xzf {serverP} -C {fileP}")
-    if unpackF.failed:
-        return False
-    removeF = sudo(f"rm {serverP}")
-    if removeF.failed:
-        return False
-    serverP = fileP
-    moveF = sudo(f"mv {serverP}/web_static/* /data/web_static/releases/{fileN}/")
-    if moveF.failed:
-        return False
-    removeF2 = sudo(f"rm -rf {serverP}/web_static")
-    if removeF2.failed:
-        return False
-    removeF3 = sudo("rm -rf /data/web_static/current")
-    if removeF3.failed:
-        return False
-    symboF = sudo(f"ln -s {fileP}/ /data/web_static/current")
-    if symboF.failed:
-        return False
-    print("New version deployed!")
-    return True
